@@ -1,0 +1,3 @@
+# Ajuste os usuários/grupos conforme seu GitHub
+/packages/contracts/ @your-org/contracts-team
+/apps/web/ @your-org/web-team

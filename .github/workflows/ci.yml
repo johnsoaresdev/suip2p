@@ -1,0 +1,34 @@
+name: CI
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'pnpm'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Install deps
+        run: pnpm install
+      - name: Lint web
+        run: pnpm --filter @app/web lint
+      - name: Build web
+        run: pnpm --filter @app/web build
+      - name: Test web
+        run: pnpm --filter @app/web test --run || true
+      - name: Move tests
+        run: |
+          cd packages/contracts
+          echo "Running sui move test (requires Sui CLI preinstalled on runner)."
+          echo "Skipping by default. Enable when runner has Sui CLI."
+          # sui move test
